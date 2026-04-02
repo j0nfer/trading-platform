@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.env
+venv/
+
+# Logs (no subir datos sensibles)
+logs/*.json
+
+# Credenciales
+config/secrets.json
+config/*.key
+*.token
+
+# OS
+.DS_Store
+Thumbs.db
+nul
