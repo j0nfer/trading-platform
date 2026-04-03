@@ -6,10 +6,15 @@ Actualiza ESTADO_SESION.md con precios actuales y fecha.
 import json, os, sys, requests
 from datetime import datetime
 
-GAMMA_API = "https://gamma-api.polymarket.com"
-BASE = os.path.dirname(os.path.abspath(__file__))
+GAMMA_API   = "https://gamma-api.polymarket.com"
+TRADING_DIR = os.environ.get("TRADING_DIR", "C:\\inversiones")
+
+# Slugs verificados de las posiciones reales
+SLUG_P1 = "us-x-iran-ceasefire-by-april-15-182-528-637"
+SLUG_P2 = "iran-x-israelus-conflict-ends-by-june-30-813-454-138-725"
 
 def precio_no(slug):
+    """Obtiene precio NO directo del slug de mercado."""
     try:
         r = requests.get(f"{GAMMA_API}/markets", params={"slug": slug}, timeout=8)
         m = r.json()
@@ -37,10 +42,8 @@ def main():
     ahora = datetime.now()
     fecha = ahora.strftime("%Y-%m-%d %H:%M")
 
-    p1_no = precio_no("us-x-iran-ceasefire-by-april-15-182-528-637") or 0.82
-    p2_no = precio_no("will-the-iranian-regime-fall-by-june-30")
-    if p2_no: p2_no = round(1 - p2_no, 4)  # regime fall YES → conflict NO
-    else: p2_no = 0.82
+    p1_no = precio_no(SLUG_P1) or 0.82
+    p2_no = precio_no(SLUG_P2) or 0.40  # NO directo del mercado conflict Jun30
     b = brent()
 
     pnl1 = round((p1_no - 0.657) * 304.3, 2)
@@ -95,7 +98,7 @@ python telegram_alertas.py --setup              # instrucciones bot Telegram
 3. 📊 Actualizar portfolio.json si precios cambian >5pp
 """
 
-    path = os.path.join(BASE, "ESTADO_SESION.md")
+    path = os.path.join(TRADING_DIR, "ESTADO_SESION.md")
     with open(path, "w", encoding="utf-8") as f:
         f.write(contenido)
 

@@ -29,9 +29,10 @@ except ImportError:
     HAS_FEEDPARSER = False
 
 # Imports del sistema propio
-sys.path.insert(0, "C:\\inversiones")
-from pyth_feed      import get_wti_price, get_wti_change
-from polymarket_api import get_market_by_slug, MERCADOS
+TRADING_DIR = os.environ.get("TRADING_DIR", "C:\\inversiones")
+sys.path.insert(0, TRADING_DIR)
+from core.pyth_feed      import get_wti_price, get_wti_change
+from core.polymarket_api import get_market_by_slug, MERCADOS
 
 def get_pos2_odds():
     data = get_market_by_slug(MERCADOS["pos2_iran_jun30"])
