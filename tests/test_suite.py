@@ -10,7 +10,10 @@ Uso:
 """
 
 import sys, os
-sys.path.insert(0, "C:\\inversiones")
+
+# Soporte para CI/CD — variable de entorno TRADING_DIR sobreescribe la ruta local
+DIRECTORIO = os.environ.get("TRADING_DIR", "C:\\inversiones")
+sys.path.insert(0, DIRECTORIO)
 
 import argparse
 import datetime
@@ -20,8 +23,6 @@ import subprocess
 import time
 import traceback
 import requests
-
-DIRECTORIO = "C:\\inversiones"
 LOGS_DIR   = os.path.join(DIRECTORIO, "logs")
 BUGS_FILE  = os.path.join(LOGS_DIR, "bugs_detectados.json")
 HOY        = datetime.date.today().isoformat()

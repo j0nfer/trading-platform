@@ -24,8 +24,30 @@ from datetime import datetime
 if sys.stdout.encoding != 'utf-8':
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
+TRADING_DIR    = os.environ.get("TRADING_DIR", "C:\\inversiones")
 GAMMA_API      = "https://gamma-api.polymarket.com"
-PORTFOLIO_JSON = os.path.join(os.path.dirname(__file__), "portfolio.json")
+PORTFOLIO_JSON = os.path.join(TRADING_DIR, "portfolio.json")
+
+
+def _leer_capitales_portfolio() -> dict:
+    """Lee capitales reales desde portfolio.json. Fallback a hardcoded si falla."""
+    defaults = {"P1_Apr15_NO": 200.0, "P2_Jun30_NO": 134.0}
+    try:
+        with open(PORTFOLIO_JSON, encoding="utf-8") as f:
+            data = json.load(f)
+        posiciones = data.get("posiciones_polymarket", [])
+        result = {}
+        for pos in posiciones:
+            pid = pos.get("id", "")
+            entrada = pos.get("precio_entrada_avg", 0)
+            shares  = pos.get("shares", 0)
+            if pid == "P1_Apr15_NO":
+                result["P1_Apr15_NO"] = round(entrada * shares, 2)
+            elif pid == "P2_Jun30_NO":
+                result["P2_Jun30_NO"] = round(entrada * shares, 2)
+        return result if result else defaults
+    except Exception:
+        return defaults
 
 # ─── Definición de posiciones ─────────────────────────────────────────────────
 # Cada posición tiene escenarios que la hacen GANAR (+1) o PERDER (-1)
@@ -380,6 +402,12 @@ def analisis_completo():
     print(f"  ANÁLISIS DE CORRELACIÓN — PORTFOLIO")
     print(f"  {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     print(f"{'='*60}")
+
+    # ── Cargar capitales reales desde portfolio.json ──────────────────────────
+    capitales_reales = _leer_capitales_portfolio()
+    for pid, cap in capitales_reales.items():
+        if pid in POSICIONES:
+            POSICIONES[pid]["capital"] = cap
 
     # ── 1. Matriz de correlación actual ──────────────────────────────────────
     nombres = list(POSICIONES.keys())

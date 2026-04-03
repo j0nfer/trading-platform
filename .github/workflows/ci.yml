@@ -1,0 +1,63 @@
+name: CI — Tests Automáticos
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  tests:
+    name: 🧪 Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 📦 Instalar dependencias
+        run: pip install requests feedparser
+
+      - name: 🧪 Ejecutar tests (modo rápido — sin API)
+        env:
+          TRADING_DIR: ${{ github.workspace }}
+        run: |
+          cd $GITHUB_WORKSPACE
+          python -X utf8 tests/test_suite.py --rapido --json > test_results.json 2>&1 || true
+          python -X utf8 tests/test_suite.py --rapido
+
+      - name: 📊 Subir resultados como artefacto
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test_results.json
+          retention-days: 7
+
+  lint:
+    name: 🔍 Lint Python
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar flake8
+        run: pip install flake8
+
+      - name: 🔍 Verificar sintaxis todos los .py
+        run: |
+          # Solo errores de sintaxis (E9), no estilo
+          flake8 . --select=E9,F63,F7,F82 \
+            --exclude=dashboard/frontend,__pycache__,.git \
+            --max-line-length=120 \
+            --count
