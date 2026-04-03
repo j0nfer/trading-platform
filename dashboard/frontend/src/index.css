@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0a0e1a;
+  color: #e2e8f0;
+  font-family: 'JetBrains Mono', monospace;
+  margin: 0;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0f1629; }
+::-webkit-scrollbar-thumb { background: #1e2847; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3d9eff55; }
+
+/* Glow effects */
+.glow-green { box-shadow: 0 0 20px #00d4a020; }
+.glow-red   { box-shadow: 0 0 20px #ff475720; }
+.glow-blue  { box-shadow: 0 0 20px #3d9eff20; }
+
+/* Pulse animation for live indicator */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(1.4); }
+}
+.pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+
+/* Number flash on update */
+@keyframes flash {
+  0%   { background-color: transparent; }
+  30%  { background-color: #00d4a030; }
+  100% { background-color: transparent; }
+}
+.flash { animation: flash 0.8s ease; }

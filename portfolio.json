@@ -1,0 +1,86 @@
+{
+  "perfil": {
+    "nombre": "Jon",
+    "broker_principal": "Trade Republic",
+    "capital_total_usdc": 434.24,
+    "cash_disponible": 0.01,
+    "fecha_actualizacion": "2026-03-28"
+  },
+  "posiciones_polymarket": [
+    {
+      "id": 1,
+      "mercado": "US x Iran ceasefire by April 15?",
+      "slug": "us-x-iran-ceasefire-by-april-15-182-528-637",
+      "direccion": "NO",
+      "precio_entrada_avg": 0.657,
+      "shares": 304.3,
+      "valor_actual": 254.10,
+      "costo_base": 199.93,
+      "pnl_absoluto": 54.10,
+      "pnl_pct": 27.05,
+      "fecha_resolucion": "2026-04-15",
+      "dias_restantes": 14,
+      "condition_id": "0x773abaa5fe55e5cde51a261f444b7921652a4e059ead6b3be9fe56499c2d4609",
+      "riesgos": [
+        "Insider trading documentado: wallet NOTHINGEVERFRICKINGHAPPENS apostó $15.614 al YES",
+        "Deadline crítico 6 abril: Trump decide si reanuda strikes sobre infraestructura Iran",
+        "Houthis entraron al conflicto 28 marzo — escalada nueva",
+        "Trump effect: declaraciones unilaterales no modelizables"
+      ],
+      "notas": "Si Trump anuncia pausa o negociacion antes del 6 abril, el NO puede moverse bruscamente. Insider sugiere información privilegiada sobre posible ceasefire."
+    },
+    {
+      "id": 2,
+      "mercado": "Iran x Israel/US conflict ends by June 30?",
+      "slug": "iran-x-israelus-conflict-ends-by-june-30-813-454-138-725",
+      "direccion": "NO",
+      "precio_entrada_avg": 0.240,
+      "shares": 558.8,
+      "valor_actual": 150.88,
+      "costo_base": 134.11,
+      "pnl_absoluto": 16.77,
+      "pnl_pct": 12.5,
+      "fecha_resolucion": "2026-06-30",
+      "dias_restantes": 90,
+      "condition_id": "0x136f5a0c27a62cf9a2e40a4f48425e43d61b9571a53a2529372c0065f3218a73",
+      "ratio_potencial": 4.17,
+      "riesgos": [
+        "Reglas de resolución estrictas: requiere ceasefire bilateral público documentado",
+        "Iran rechazó plan 15 puntos Trump el 25 marzo — señal bearish para YES",
+        "Hormuz al 5% — presión económica puede forzar negociación en semanas"
+      ],
+      "notas": "Posición más sólida. Reglas estrictas favorecen NO. Ratio 4.17x muy atractivo. Vigilar cualquier señal de negociación bilateral."
+    }
+  ],
+  "equity_watchlist": [
+    {
+      "ticker": "SNDK",
+      "nombre": "SanDisk Corporation",
+      "estado": "WAIT",
+      "precio_actual": null,
+      "zona_entrada_min": 580,
+      "zona_entrada_max": 620,
+      "consenso_analistas": 555,
+      "beta": 2.74,
+      "earnings_date": "2026-05-13",
+      "notas": "Precio actual sobre consenso analistas ($555). Esperar corrección a zona $580-620 antes de entrar. Alta beta — amplifica movimientos del mercado."
+    }
+  ],
+  "contexto_macro": {
+    "fecha": "2026-03-28",
+    "brent_usd": 112.57,
+    "brent_cambio_pct": 4.22,
+    "wti_usd": 99.64,
+    "wti_cambio_pct": 5.46,
+    "conflicto_iran_dia": 29,
+    "fed_proxima_reunion": "2026-04-29",
+    "probabilidad_recesion_2026_polymarket_pct": 36,
+    "eventos_criticos": [
+      "2026-04-06: Trump decide si reanuda strikes infraestructura energética Iran",
+      "2026-04-15: Resolución mercado ceasefire April 15",
+      "2026-04-29: Reunión Fed (sin cambios esperados)",
+      "2026-05-13: Earnings SNDK",
+      "2026-06-30: Resolución mercado conflict ends June 30"
+    ]
+  }
+}

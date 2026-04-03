@@ -40,10 +40,80 @@ GAMMA_API                 = _core.GAMMA_API
 
 # ─── APP ─────────────────────────────────────────────────────────────────────
 
+DESCRIPTION = """
+## Trading Platform API 🎯
+
+API en tiempo real para gestión de portfolio en **Polymarket** — especializada en mercados geopolíticos.
+
+---
+
+### 📊 Posiciones actuales
+| # | Mercado | Dir | Entrada |
+|---|---------|-----|---------|
+| 1 | US x Iran ceasefire by April 15? | **NO** | 65.7¢ |
+| 2 | Iran x Israel/US conflict ends by June 30? | **NO** | 24¢ |
+
+---
+
+### 🔌 Endpoints disponibles
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /` | Health check |
+| `GET /prices` | Precios YES/NO en tiempo real |
+| `GET /portfolio` | Posiciones con P/L calculado |
+| `GET /portfolio/summary` | Resumen ejecutivo compacto |
+| `GET /whales` | Actividad grandes jugadores |
+| `GET /signals` | Señales activas de trading |
+
+---
+
+### ⚡ APIs externas
+- **Polymarket Gamma API** → precios de mercados
+- **Polymarket Data API** → actividad de trades
+- **Yahoo Finance** → precio Brent en tiempo real
+
+---
+
+### 📅 Deadlines críticos
+- **6 abril** — Trump decide si reanuda strikes sobre Irán
+- **15 abril** — Resolución Ceasefire Apr15
+- **30 junio** — Resolución Conflict Jun30
+"""
+
+TAGS = [
+    {
+        "name": "sistema",
+        "description": "Health check y estado del sistema",
+    },
+    {
+        "name": "precios",
+        "description": "Precios en tiempo real de mercados Polymarket",
+    },
+    {
+        "name": "portfolio",
+        "description": "Posiciones abiertas, P/L y resumen ejecutivo",
+    },
+    {
+        "name": "inteligencia",
+        "description": "Actividad whale y señales de trading accionables",
+    },
+]
+
 app = FastAPI(
     title="Trading Platform API",
-    description="API para gestión de portfolio en Polymarket — mercados geopolíticos",
+    description=DESCRIPTION,
     version="1.0.0",
+    openapi_tags=TAGS,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    contact={
+        "name": "Jon — Trading Platform",
+        "url": "https://github.com/j0nfer/trading-platform",
+    },
+    license_info={
+        "name": "Private",
+    },
 )
 
 app.add_middleware(
@@ -153,7 +223,7 @@ def _analizar_whales(trades: list, nuestra_pos: str, horas: int, umbral: float) 
 
 # ─── ENDPOINTS ───────────────────────────────────────────────────────────────
 
-@app.get("/")
+@app.get("/", tags=["sistema"])
 def health_check():
     """Health check — confirma que la API está operativa."""
     return {
@@ -163,7 +233,7 @@ def health_check():
     }
 
 
-@app.get("/prices")
+@app.get("/prices", tags=["precios"])
 def get_prices():
     """Precios actuales YES/NO de ambos mercados en tiempo real."""
     precios = _get_precios_posiciones()
@@ -185,7 +255,7 @@ def get_prices():
     return resultado
 
 
-@app.get("/portfolio")
+@app.get("/portfolio", tags=["portfolio"])
 def get_portfolio():
     """
     Posiciones abiertas con P/L calculado en tiempo real.
@@ -240,7 +310,7 @@ def get_portfolio():
     }
 
 
-@app.get("/portfolio/summary")
+@app.get("/portfolio/summary", tags=["portfolio"])
 def get_portfolio_summary():
     """Resumen ejecutivo compacto — ideal para dashboard header."""
     try:
@@ -264,7 +334,7 @@ def get_portfolio_summary():
         return {"error": str(e)}
 
 
-@app.get("/whales")
+@app.get("/whales", tags=["inteligencia"])
 def get_whales(
     horas:  int   = Query(default=6,   ge=1, le=168, description="Ventana temporal en horas"),
     umbral: float = Query(default=500, ge=0,          description="Tamaño mínimo de trade en $"),
@@ -290,7 +360,7 @@ def get_whales(
     return resultado
 
 
-@app.get("/signals")
+@app.get("/signals", tags=["inteligencia"])
 def get_signals():
     """
     Señales activas: TACO, escalada, whale, precio.

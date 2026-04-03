@@ -18,3 +18,7 @@ config/*.key
 .DS_Store
 Thumbs.db
 nul
+
+# Frontend
+dashboard/frontend/node_modules/
+dashboard/frontend/dist/
