@@ -269,7 +269,8 @@ def imprimir_checklist(resultado: dict) -> None:
             pts, razon = scores[key]
             barra = "\u2588" * pts + "\u2591" * (3 - pts)
             print(f"   {label}: {pts}/3 [{barra}] {razon}")
-    print(f"\n   {'\u2500'*49}")
+    separador = "\u2500" * 49
+    print(f"\n   {separador}")
     total = resultado["total"]
     barra_total = "\u2588" * (total // 3) + "\u2591" * (10 - total // 3)
     print(f"   TOTAL: {total}/30 [{barra_total}]")

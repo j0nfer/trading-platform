@@ -194,7 +194,6 @@ def ejecutar_checklist(mercado="", interactivo=True, respuestas_pre=None):
     respuestas = {}
 
     def hacer_pregunta(p, bloque_letra):
-        nonlocal respuestas
         if not interactivo and respuestas_pre:
             resp = respuestas_pre.get(p["id"])
             respuestas[p["id"]] = resp if resp is not None else (p["tipo"] == "SI")
