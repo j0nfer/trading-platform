@@ -41,8 +41,8 @@
     },
     {
       "id": "P3_WTI_YES",
-      "mercado": "Will WTI Crude Oil hit (HIGH) $120?",
-      "slug": "PENDIENTE_VERIFICAR",
+      "mercado": "Will WTI Crude Oil hit (HIGH) $120 in April?",
+      "slug": "will-wti-reach-120-in-april-2026-661-675-724-482",
       "direccion": "YES",
       "precio_entrada_avg": 0.510,
       "shares": 289.0,
@@ -50,10 +50,10 @@
       "costo_base": 147.41,
       "pnl_absoluto": 76.60,
       "pnl_pct": 51.96,
-      "fecha_resolucion": "2026-12-31",
-      "dias_restantes": 270,
-      "condition_id": "PENDIENTE",
-      "notas": "YES a WTI alcanzando $120. Correlacionado positivamente con Pos1/Pos2 (conflicto Iran sube petroleo). Brent actual $109."
+      "fecha_resolucion": "2026-04-30",
+      "dias_restantes": 26,
+      "condition_id": "0x7eceae72d7d7b3e175fa872c728526e6fec4714288a4bda91fe818e298e69a6f",
+      "notas": "YES a WTI alcanzando $120 en abril. WTI ya supero $100 y $110. Resuelve fin de abril. Correlacionado con conflicto Iran."
     },
     {
       "id": "P4_InvadeIran_NO",
@@ -67,9 +67,9 @@
       "pnl_absoluto": -20.59,
       "pnl_pct": -9.57,
       "fecha_resolucion": "2026-12-31",
-      "dias_restantes": 270,
+      "dias_restantes": 271,
       "condition_id": "0x5db999fad322cea2914535aae5517060c3f80ad6d8c0231cde2124a434d16846",
-      "notas": "NO a invasion terrestre de Iran. YES subio a 57.5% — posicion en rojo. Vigilar escalada militar post-6 abril."
+      "notas": "NO a invasion terrestre de Iran. YES subio a 57.5% — posicion en rojo -$21. Vigilar escalada militar post-6 abril."
     }
   ],
   "posiciones_resueltas": [

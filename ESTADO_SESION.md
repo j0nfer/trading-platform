@@ -3,7 +3,7 @@
 <!-- Claude lo lee al inicio para retomar sin re-establecer contexto -->
 
 ## Fecha última actualización
-2026-04-04 10:05
+2026-04-04 10:08
 
 ## Portfolio (precios al cierre de sesión)
 
@@ -11,9 +11,9 @@
 |---|---|---|---|---|---|
 | Pos1 Ceasefire Apr15 (73sh) | NO | 65.7¢ | **94%** | **+21$** | 15 abr (11d) |
 | Pos2 Conflict Jun30 (558.8sh) | NO | 24¢ | **44%** | **+115$** | 30 jun (87d) |
-| Pos3 WTI $120 YES (289sh) | YES | 51¢ | **78%** | **+77$** | 31 dic (271d) |
+| Pos3 WTI $120 YES (289sh) | YES | 51¢ | **77%** | **+75$** | 30 abr (26d) |
 | Pos4 InvadeIran NO (457.6sh) | NO | 47¢ | **42%** | **-21$** | 31 dic (271d) |
-| **TOTAL P/L** | | | | **+192$** | |
+| **TOTAL P/L** | | | | **+190$** | |
 
 Capital total: $736.21 USDC | Cash: $0.01 (SIN LIQUIDEZ)
 

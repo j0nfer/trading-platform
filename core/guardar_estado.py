@@ -10,8 +10,10 @@ GAMMA_API   = "https://gamma-api.polymarket.com"
 TRADING_DIR = os.environ.get("TRADING_DIR", "C:\\inversiones")
 
 # Slugs verificados de las posiciones reales
-SLUG_P1 = "us-x-iran-ceasefire-by-april-15-182-528-637"
-SLUG_P2 = "iran-x-israelus-conflict-ends-by-june-30-813-454-138-725"
+SLUG_P1  = "us-x-iran-ceasefire-by-april-15-182-528-637"
+SLUG_P2  = "iran-x-israelus-conflict-ends-by-june-30-813-454-138-725"
+SLUG_P3  = "will-wti-reach-120-in-april-2026-661-675-724-482"
+SLUG_P4  = "will-the-us-invade-iran-before-2027"
 
 def precio_no(slug):
     """Obtiene precio NO directo del slug de mercado."""
@@ -44,8 +46,9 @@ def main():
 
     p1_no  = precio_no(SLUG_P1) or 0.945
     p2_no  = precio_no(SLUG_P2) or 0.445
-    p4_no  = precio_no("will-the-us-invade-iran-before-2027") or 0.425
-    p3_yes = 0.775  # WTI $120 YES — slug pendiente verificacion
+    _p3_no = precio_no(SLUG_P3)
+    p3_yes = round(1 - _p3_no, 4) if _p3_no else 0.765  # YES = 1 - NO
+    p4_no  = precio_no(SLUG_P4) or 0.425
     b = brent()
 
     pnl1 = round((p1_no  - 0.657) * 73.0,  2)
@@ -57,10 +60,10 @@ def main():
     brent_str = f"${b:.2f}" if b else "N/D"
 
     from datetime import date
-    dias_apr15 = (date(2026, 4, 15) - date.today()).days
     dias_apr6  = (date(2026, 4,  6) - date.today()).days
+    dias_apr15 = (date(2026, 4, 15) - date.today()).days
+    dias_apr30 = (date(2026, 4, 30) - date.today()).days
     dias_jun30 = (date(2026, 6, 30) - date.today()).days
-
     dias_dic31 = (date(2026, 12, 31) - date.today()).days
 
     contenido = f"""# ESTADO DE SESIÓN — Auto-generado
@@ -76,7 +79,7 @@ def main():
 |---|---|---|---|---|---|
 | Pos1 Ceasefire Apr15 (73sh) | NO | 65.7¢ | **{p1_no:.0%}** | **{pnl1:+.0f}$** | 15 abr ({dias_apr15}d) |
 | Pos2 Conflict Jun30 (558.8sh) | NO | 24¢ | **{p2_no:.0%}** | **{pnl2:+.0f}$** | 30 jun ({dias_jun30}d) |
-| Pos3 WTI $120 YES (289sh) | YES | 51¢ | **{p3_yes:.0%}** | **{pnl3:+.0f}$** | 31 dic ({dias_dic31}d) |
+| Pos3 WTI $120 YES (289sh) | YES | 51¢ | **{p3_yes:.0%}** | **{pnl3:+.0f}$** | 30 abr ({dias_apr30}d) |
 | Pos4 InvadeIran NO (457.6sh) | NO | 47¢ | **{p4_no:.0%}** | **{pnl4:+.0f}$** | 31 dic ({dias_dic31}d) |
 | **TOTAL P/L** | | | | **{pnl_total:+.0f}$** | |
 
