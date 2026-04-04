@@ -3,17 +3,19 @@
 <!-- Claude lo lee al inicio para retomar sin re-establecer contexto -->
 
 ## Fecha última actualización
-2026-04-04 09:02
+2026-04-04 10:05
 
 ## Portfolio (precios al cierre de sesión)
 
-| Posición | Dir | Entrada | Precio NO actual | P/L | Resuelve |
+| Posición | Dir | Entrada | Precio actual | P/L | Resuelve |
 |---|---|---|---|---|---|
-| Ceasefire Apr15 | NO | 65.7¢ | **94%** | **+88$** | 15 abr (11d) |
-| Conflict Jun30 | NO | 24¢ | **46%** | **+120$** | 30 jun (87d) |
-| **TOTAL P/L** | | | | **+208$** | |
+| Pos1 Ceasefire Apr15 (73sh) | NO | 65.7¢ | **94%** | **+21$** | 15 abr (11d) |
+| Pos2 Conflict Jun30 (558.8sh) | NO | 24¢ | **44%** | **+115$** | 30 jun (87d) |
+| Pos3 WTI $120 YES (289sh) | YES | 51¢ | **78%** | **+77$** | 31 dic (271d) |
+| Pos4 InvadeIran NO (457.6sh) | NO | 47¢ | **42%** | **-21$** | 31 dic (271d) |
+| **TOTAL P/L** | | | | **+192$** | |
 
-Capital total: $434.24 USDC | Cash: $0.01 (SIN LIQUIDEZ)
+Capital total: $736.21 USDC | Cash: $0.01 (SIN LIQUIDEZ)
 
 ## Deadlines críticos
 - 🔴 **6 ABRIL** (2 días) — Trump decide si reanuda strikes

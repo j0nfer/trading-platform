@@ -2,7 +2,7 @@
   "perfil": {
     "nombre": "Jon",
     "broker_principal": "Trade Republic",
-    "capital_total_usdc": 434.24,
+    "capital_total_usdc": 736.21,
     "cash_disponible": 0.01,
     "fecha_actualizacion": "2026-04-04"
   },
@@ -13,21 +13,15 @@
       "slug": "us-x-iran-ceasefire-by-april-15-182-528-637",
       "direccion": "NO",
       "precio_entrada_avg": 0.657,
-      "shares": 304.3,
-      "valor_actual": 287.57,
-      "costo_base": 199.93,
-      "pnl_absoluto": 87.64,
-      "pnl_pct": 43.83,
+      "shares": 73.0,
+      "valor_actual": 69.03,
+      "costo_base": 48.01,
+      "pnl_absoluto": 21.02,
+      "pnl_pct": 43.79,
       "fecha_resolucion": "2026-04-15",
       "dias_restantes": 11,
       "condition_id": "0x773abaa5fe55e5cde51a261f444b7921652a4e059ead6b3be9fe56499c2d4609",
-      "riesgos": [
-        "Insider trading documentado: wallet NOTHINGEVERFRICKINGHAPPENS apostó $15.614 al YES",
-        "Deadline crítico 6 abril: Trump decide si reanuda strikes sobre infraestructura Iran",
-        "Houthis entraron al conflicto 28 marzo — escalada nueva",
-        "Trump effect: declaraciones unilaterales no modelizables"
-      ],
-      "notas": "NO al 94.5%. Upside restante 5.5¢. Ratio riesgo/beneficio deteriorado — considerar venta parcial antes del 6 abril."
+      "notas": "Reducida de 304.3 a 73.0 shares el 4 abril — venta parcial para cristalizar ganancias antes del 6 abril."
     },
     {
       "id": "P2_Jun30_NO",
@@ -36,34 +30,64 @@
       "direccion": "NO",
       "precio_entrada_avg": 0.240,
       "shares": 558.8,
-      "valor_actual": 254.25,
-      "costo_base": 134.11,
-      "pnl_absoluto": 120.14,
-      "pnl_pct": 89.58,
+      "valor_actual": 248.68,
+      "costo_base": 134.12,
+      "pnl_absoluto": 114.56,
+      "pnl_pct": 85.42,
       "fecha_resolucion": "2026-06-30",
       "dias_restantes": 87,
       "condition_id": "0x136f5a0c27a62cf9a2e40a4f48425e43d61b9571a53a2529372c0065f3218a73",
-      "ratio_potencial": 2.20,
-      "riesgos": [
-        "Reglas de resolución estrictas: requiere ceasefire bilateral público documentado",
-        "Iran rechazó plan 15 puntos Trump el 25 marzo — señal bearish para YES",
-        "Hormuz: presión económica puede forzar negociación"
-      ],
-      "notas": "NO al 45.5%. P/L +120$. Posición más sólida. Vigilar señales de negociación bilateral."
+      "notas": "Posición principal. NO directo al conflicto Jun30. Mantener."
+    },
+    {
+      "id": "P3_WTI_YES",
+      "mercado": "Will WTI Crude Oil hit (HIGH) $120?",
+      "slug": "PENDIENTE_VERIFICAR",
+      "direccion": "YES",
+      "precio_entrada_avg": 0.510,
+      "shares": 289.0,
+      "valor_actual": 224.01,
+      "costo_base": 147.41,
+      "pnl_absoluto": 76.60,
+      "pnl_pct": 51.96,
+      "fecha_resolucion": "2026-12-31",
+      "dias_restantes": 270,
+      "condition_id": "PENDIENTE",
+      "notas": "YES a WTI alcanzando $120. Correlacionado positivamente con Pos1/Pos2 (conflicto Iran sube petroleo). Brent actual $109."
+    },
+    {
+      "id": "P4_InvadeIran_NO",
+      "mercado": "Will the U.S. invade Iran before 2027?",
+      "slug": "will-the-us-invade-iran-before-2027",
+      "direccion": "NO",
+      "precio_entrada_avg": 0.470,
+      "shares": 457.6,
+      "valor_actual": 194.49,
+      "costo_base": 215.08,
+      "pnl_absoluto": -20.59,
+      "pnl_pct": -9.57,
+      "fecha_resolucion": "2026-12-31",
+      "dias_restantes": 270,
+      "condition_id": "0x5db999fad322cea2914535aae5517060c3f80ad6d8c0231cde2124a434d16846",
+      "notas": "NO a invasion terrestre de Iran. YES subio a 57.5% — posicion en rojo. Vigilar escalada militar post-6 abril."
     }
+  ],
+  "posiciones_resueltas": [
+    {"mercado": "Will Bitcoin hit $70k or $90k first? (90k)", "resultado": "LOST", "pnl": -165.00},
+    {"mercado": "Will Bitcoin be above $78,000?", "resultado": "LOST", "pnl": -143.82},
+    {"mercado": "S&P 500 Opens Up or Down on Feb?", "resultado": "LOST", "pnl": -8.00},
+    {"mercado": "Solana Up or Down on Feb 8?", "resultado": "LOST", "pnl": -130.10},
+    {"mercado": "Will Gold hit LOW $4,700?", "resultado": "LOST", "pnl": 0}
   ],
   "equity_watchlist": [
     {
       "ticker": "SNDK",
       "nombre": "SanDisk Corporation",
       "estado": "WAIT",
-      "precio_actual": null,
       "zona_entrada_min": 580,
       "zona_entrada_max": 620,
-      "consenso_analistas": 555,
-      "beta": 2.74,
       "earnings_date": "2026-05-13",
-      "notas": "Precio actual sobre consenso analistas ($555). Esperar corrección a zona $580-620 antes de entrar. Alta beta — amplifica movimientos del mercado."
+      "notas": "Esperar correccion a zona $580-620."
     }
   ],
   "contexto_macro": {
@@ -72,11 +96,11 @@
     "conflicto_iran_dia": 36,
     "fed_proxima_reunion": "2026-04-29",
     "eventos_criticos": [
-      "2026-04-06: Trump decide si reanuda strikes infraestructura energética Iran",
-      "2026-04-15: Resolución mercado ceasefire April 15",
-      "2026-04-29: Reunión Fed (sin cambios esperados)",
-      "2026-05-13: Earnings SNDK",
-      "2026-06-30: Resolución mercado conflict ends June 30"
+      "2026-04-06: Trump decide si reanuda strikes sobre Iran",
+      "2026-04-15: Resolucion Pos1 Ceasefire Apr15",
+      "2026-04-29: Reunion Fed",
+      "2026-06-30: Resolucion Pos2 Conflict Jun30",
+      "2026-12-31: Resolucion Pos3 WTI $120 y Pos4 InvadeIran"
     ]
   }
 }
