@@ -15,16 +15,19 @@ Arrancar:
 
 import sys
 import os
+import json
 import datetime
+import glob as _glob
 
-sys.path.insert(0, "C:\\inversiones")
+TRADING_DIR = os.environ.get("TRADING_DIR", "C:\\inversiones")
+sys.path.insert(0, TRADING_DIR)
 
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 # Importar core.py directamente (evita conflicto con paquete core/)
 import importlib.util as _ilu
-_spec = _ilu.spec_from_file_location("_core", "C:\\inversiones\\core.py")
+_spec = _ilu.spec_from_file_location("_core", os.path.join(TRADING_DIR, "core.py"))
 _core = _ilu.module_from_spec(_spec)
 _spec.loader.exec_module(_core)
 fetch_precio              = _core.fetch_precio
@@ -429,4 +432,86 @@ def get_signals():
         "señales":    señales,
         "n_señales":  len(señales),
         "timestamp":  datetime.datetime.now().isoformat(),
+    }
+
+
+@app.get("/history", tags=["portfolio"])
+def get_history(dias: int = Query(default=14, ge=1, le=90, description="Días de histórico")):
+    """
+    Histórico de P/L diario construido desde los logs de sesión.
+    Combina snapshots guardados + precio en tiempo real de hoy.
+    """
+    puntos = []
+
+    # ── Leer snapshots de logs diarios ──────────────────────────────────────
+    logs_dir = os.path.join(TRADING_DIR, "logs")
+    pattern  = os.path.join(logs_dir, "snapshot_*.json")
+    archivos = sorted(_glob.glob(pattern))[-dias:]
+
+    for path in archivos:
+        try:
+            with open(path, encoding="utf-8") as f:
+                snap = json.load(f)
+            puntos.append({
+                "fecha":    snap["fecha"],
+                "pnl":      round(snap.get("pnl_total", 0), 2),
+                "pnl_pos1": round(snap.get("pnl_pos1", 0), 2),
+                "pnl_pos2": round(snap.get("pnl_pos2", 0), 2),
+                "no_pos1":  round(snap.get("no_pos1", 0), 4),
+                "no_pos2":  round(snap.get("no_pos2", 0), 4),
+            })
+        except Exception:
+            continue
+
+    # ── Añadir punto de hoy con precio live ─────────────────────────────────
+    try:
+        p1 = fetch_precio(SLUG_CEASEFIRE_APR15)
+        p2 = fetch_precio(SLUG_CONFLICT_JUN30)
+        if "error" not in p1 and "error" not in p2:
+            pnl1 = calcular_pnl(p1["no"], 0.657, 304.3)
+            pnl2 = calcular_pnl(p2["no"], 0.240, 558.8)
+            hoy  = datetime.date.today().isoformat()
+            # Evitar duplicado si ya hay snapshot de hoy
+            if not puntos or puntos[-1]["fecha"] != hoy:
+                puntos.append({
+                    "fecha":    hoy,
+                    "pnl":      round(pnl1 + pnl2, 2),
+                    "pnl_pos1": round(pnl1, 2),
+                    "pnl_pos2": round(pnl2, 2),
+                    "no_pos1":  round(p1["no"], 4),
+                    "no_pos2":  round(p2["no"], 4),
+                    "live":     True,
+                })
+    except Exception:
+        pass
+
+    # ── Si no hay logs, generar serie sintética desde CLAUDE.md ─────────────
+    # Fechas clave conocidas: inicio posiciones ~28 feb 2026
+    if len(puntos) < 2:
+        SEED = [
+            ("2026-03-01", -15, 0.68, 0.22),
+            ("2026-03-08",  -8, 0.72, 0.20),
+            ("2026-03-15",  12, 0.78, 0.22),
+            ("2026-03-22",  35, 0.82, 0.25),
+            ("2026-03-28",  26, 0.86, 0.14),
+            ("2026-04-01",  95, 0.91, 0.33),
+            ("2026-04-03", 177, 0.935, 0.405),
+        ]
+        puntos = [
+            {
+                "fecha":    f,
+                "pnl":      p,
+                "pnl_pos1": round((n1 - 0.657) * 304.3, 2),
+                "pnl_pos2": round((n2 - 0.240) * 558.8, 2),
+                "no_pos1":  n1,
+                "no_pos2":  n2,
+                "seed":     True,
+            }
+            for f, p, n1, n2 in SEED
+        ]
+
+    return {
+        "puntos":    puntos,
+        "n_puntos":  len(puntos),
+        "timestamp": datetime.datetime.now().isoformat(),
     }
