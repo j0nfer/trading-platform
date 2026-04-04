@@ -18,12 +18,49 @@ import os
 import json
 import datetime
 import glob as _glob
+import asyncio
+import subprocess
+from contextlib import asynccontextmanager
+
+import aiosqlite
 
 TRADING_DIR = os.environ.get("TRADING_DIR", "C:\\inversiones")
+NEWS_DB     = os.path.join(TRADING_DIR, "news_cache.db")
 sys.path.insert(0, TRADING_DIR)
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+
+# ─── DB SCHEMA ───────────────────────────────────────────────────────────────
+
+_DDL = """
+CREATE TABLE IF NOT EXISTS news (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    title       TEXT    NOT NULL,
+    url         TEXT,
+    source      TEXT,
+    market      TEXT,
+    priority    TEXT    DEFAULT 'MEDIA',
+    summary     TEXT,
+    published_at TEXT,
+    fetched_at  TEXT    DEFAULT (strftime('%Y-%m-%dT%H:%M:%S', 'now'))
+);
+CREATE INDEX IF NOT EXISTS idx_news_fetched  ON news(fetched_at);
+CREATE INDEX IF NOT EXISTS idx_news_market   ON news(market);
+CREATE INDEX IF NOT EXISTS idx_news_priority ON news(priority);
+"""
+
+
+async def _init_db():
+    async with aiosqlite.connect(NEWS_DB) as db:
+        await db.executescript(_DDL)
+        await db.commit()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await _init_db()
+    yield
 
 # Importar core.py directamente (evita conflicto con paquete core/)
 import importlib.util as _ilu
@@ -101,6 +138,10 @@ TAGS = [
         "name": "inteligencia",
         "description": "Actividad whale y señales de trading accionables",
     },
+    {
+        "name": "noticias",
+        "description": "Noticias y eventos relevantes desde news_cache.db",
+    },
 ]
 
 app = FastAPI(
@@ -110,6 +151,7 @@ app = FastAPI(
     openapi_tags=TAGS,
     docs_url="/docs",
     redoc_url="/redoc",
+    lifespan=lifespan,
     contact={
         "name": "Jon — Trading Platform",
         "url": "https://github.com/j0nfer/trading-platform",
@@ -513,5 +555,141 @@ def get_history(dias: int = Query(default=14, ge=1, le=90, description="Días de
     return {
         "puntos":    puntos,
         "n_puntos":  len(puntos),
+        "timestamp": datetime.datetime.now().isoformat(),
+    }
+
+
+# ─── NOTICIAS ────────────────────────────────────────────────────────────────
+
+@app.get("/api/news", tags=["noticias"])
+async def get_news(
+    market:   str | None = Query(default=None,  description="Filtrar por mercado (ej: 'iran', 'wti')"),
+    priority: str | None = Query(default=None,  description="CRITICA | ALTA | MEDIA | BAJA"),
+    hours:    int        = Query(default=24, ge=1, le=720, description="Ventana temporal en horas"),
+    limit:    int        = Query(default=50, ge=1, le=200, description="Máximo de resultados"),
+):
+    """
+    Noticias almacenadas en news_cache.db.
+    Filtrables por mercado, prioridad y ventana temporal.
+    """
+    cutoff = (datetime.datetime.utcnow() - datetime.timedelta(hours=hours)).isoformat()
+
+    conditions = ["fetched_at >= ?"]
+    params: list = [cutoff]
+
+    if market:
+        conditions.append("LOWER(market) LIKE ?")
+        params.append(f"%{market.lower()}%")
+    if priority:
+        conditions.append("UPPER(priority) = ?")
+        params.append(priority.upper())
+
+    where = " AND ".join(conditions)
+    sql   = f"SELECT * FROM news WHERE {where} ORDER BY fetched_at DESC LIMIT ?"
+    params.append(limit)
+
+    try:
+        async with aiosqlite.connect(NEWS_DB) as db:
+            db.row_factory = aiosqlite.Row
+            async with db.execute(sql, params) as cur:
+                rows = await cur.fetchall()
+        items = [dict(r) for r in rows]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    return {
+        "items":     items,
+        "n_items":   len(items),
+        "filtros":   {"market": market, "priority": priority, "hours": hours},
+        "timestamp": datetime.datetime.now().isoformat(),
+    }
+
+
+@app.get("/api/news/stats", tags=["noticias"])
+async def get_news_stats(
+    hours: int = Query(default=24, ge=1, le=720, description="Ventana temporal en horas"),
+):
+    """Cuenta de noticias por prioridad en la ventana temporal indicada."""
+    cutoff = (datetime.datetime.utcnow() - datetime.timedelta(hours=hours)).isoformat()
+
+    sql = """
+        SELECT priority, COUNT(*) as total
+        FROM news
+        WHERE fetched_at >= ?
+        GROUP BY priority
+        ORDER BY CASE priority
+            WHEN 'CRITICA' THEN 1
+            WHEN 'ALTA'    THEN 2
+            WHEN 'MEDIA'   THEN 3
+            WHEN 'BAJA'    THEN 4
+            ELSE 5 END
+    """
+
+    try:
+        async with aiosqlite.connect(NEWS_DB) as db:
+            db.row_factory = aiosqlite.Row
+            async with db.execute(sql, [cutoff]) as cur:
+                rows = await cur.fetchall()
+
+            async with db.execute(
+                "SELECT COUNT(*) FROM news WHERE fetched_at >= ?", [cutoff]
+            ) as cur2:
+                total = (await cur2.fetchone())[0]
+
+            async with db.execute(
+                "SELECT MAX(fetched_at) FROM news"
+            ) as cur3:
+                ultima = (await cur3.fetchone())[0]
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    por_prioridad = {r["priority"]: r["total"] for r in rows}
+
+    return {
+        "total":          total,
+        "por_prioridad":  por_prioridad,
+        "criticas":       por_prioridad.get("CRITICA", 0),
+        "altas":          por_prioridad.get("ALTA",    0),
+        "medias":         por_prioridad.get("MEDIA",   0),
+        "bajas":          por_prioridad.get("BAJA",    0),
+        "ultima_noticia": ultima,
+        "ventana_horas":  hours,
+        "timestamp":      datetime.datetime.now().isoformat(),
+    }
+
+
+@app.post("/api/news/refresh", tags=["noticias"])
+async def refresh_news():
+    """
+    Ejecuta un ciclo de news_monitor.py para actualizar la DB.
+    Devuelve stdout/stderr y código de salida.
+    """
+    monitor_path = os.path.join(TRADING_DIR, "news_monitor.py")
+
+    if not os.path.exists(monitor_path):
+        raise HTTPException(
+            status_code=404,
+            detail=f"news_monitor.py no encontrado en {TRADING_DIR}",
+        )
+
+    try:
+        proc = await asyncio.create_subprocess_exec(
+            sys.executable, "-X", "utf8", monitor_path, "--once",
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+            cwd=TRADING_DIR,
+        )
+        stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=60)
+    except asyncio.TimeoutError:
+        raise HTTPException(status_code=504, detail="news_monitor.py tardó más de 60s")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    return {
+        "exit_code": proc.returncode,
+        "ok":        proc.returncode == 0,
+        "stdout":    stdout.decode("utf-8", errors="replace")[-2000:],
+        "stderr":    stderr.decode("utf-8", errors="replace")[-500:],
         "timestamp": datetime.datetime.now().isoformat(),
     }
