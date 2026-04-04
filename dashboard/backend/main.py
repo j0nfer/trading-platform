@@ -561,7 +561,7 @@ def get_history(dias: int = Query(default=14, ge=1, le=90, description="Días de
 
 # ─── NOTICIAS ────────────────────────────────────────────────────────────────
 
-@app.get("/api/news", tags=["noticias"])
+@app.get("/news", tags=["noticias"])
 async def get_news(
     market:   str | None = Query(default=None,  description="Filtrar por mercado (ej: 'iran', 'wti')"),
     priority: str | None = Query(default=None,  description="CRITICA | ALTA | MEDIA | BAJA"),
@@ -605,7 +605,7 @@ async def get_news(
     }
 
 
-@app.get("/api/news/stats", tags=["noticias"])
+@app.get("/news/stats", tags=["noticias"])
 async def get_news_stats(
     hours: int = Query(default=24, ge=1, le=720, description="Ventana temporal en horas"),
 ):
@@ -659,7 +659,7 @@ async def get_news_stats(
     }
 
 
-@app.post("/api/news/refresh", tags=["noticias"])
+@app.post("/news/refresh", tags=["noticias"])
 async def refresh_news():
     """
     Ejecuta un ciclo de news_monitor.py para actualizar la DB.

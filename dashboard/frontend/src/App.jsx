@@ -5,6 +5,7 @@ import SignalsCard from './components/SignalsCard'
 import WhalesCard from './components/WhalesCard'
 import CountdownCard from './components/CountdownCard'
 import PnlChart from './components/PnlChart'
+import NewsWidget from './components/NewsWidget'
 
 export default function App() {
   return (
@@ -38,6 +39,9 @@ export default function App() {
           <SignalsCard />
           <WhalesCard />
         </div>
+
+        {/* Row 4: News (full width) */}
+        <NewsWidget />
 
       </main>
 
