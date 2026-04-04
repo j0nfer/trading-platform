@@ -3,22 +3,22 @@
 <!-- Claude lo lee al inicio para retomar sin re-establecer contexto -->
 
 ## Fecha última actualización
-2026-04-03 19:32
+2026-04-04 09:02
 
 ## Portfolio (precios al cierre de sesión)
 
 | Posición | Dir | Entrada | Precio NO actual | P/L | Resuelve |
 |---|---|---|---|---|---|
-| Ceasefire Apr15 | NO | 65.7¢ | **94%** | **+85$** | 15 abr (12d) |
-| Conflict Jun30 | NO | 24¢ | **40%** | **+92$** | 30 jun (88d) |
-| **TOTAL P/L** | | | | **+177$** | |
+| Ceasefire Apr15 | NO | 65.7¢ | **94%** | **+88$** | 15 abr (11d) |
+| Conflict Jun30 | NO | 24¢ | **46%** | **+120$** | 30 jun (87d) |
+| **TOTAL P/L** | | | | **+208$** | |
 
 Capital total: $434.24 USDC | Cash: $0.01 (SIN LIQUIDEZ)
 
 ## Deadlines críticos
-- 🔴 **6 ABRIL** (3 días) — Trump decide si reanuda strikes
-- 🟡 **15 ABRIL** (12 días) — Resolución ceasefire Apr15
-- ⚪ **30 JUNIO** (88 días) — Resolución conflict ends Jun30
+- 🔴 **6 ABRIL** (2 días) — Trump decide si reanuda strikes
+- 🟡 **15 ABRIL** (11 días) — Resolución ceasefire Apr15
+- ⚪ **30 JUNIO** (87 días) — Resolución conflict ends Jun30
 
 ## Contexto macro
 - Brent: $109.05
