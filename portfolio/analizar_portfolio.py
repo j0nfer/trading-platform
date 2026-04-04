@@ -941,10 +941,18 @@ def main():
     # ── Macro ─────────────────────────────────────────────────────────────────
     print()
     titulo("CONTEXTO MACRO")
-    print(f"  Brent    : ${macro['brent_usd']:.2f}  ({s(macro['brent_cambio_pct'])}{macro['brent_cambio_pct']}%)")
-    print(f"  WTI      : ${macro['wti_usd']:.2f}   ({s(macro['wti_cambio_pct'])}{macro['wti_cambio_pct']}%)")
-    print(f"  Conflicto Iran: dia {macro['conflicto_iran_dia']}")
-    print(f"  Recesion 2026 (Polymarket): {macro['probabilidad_recesion_2026_polymarket_pct']}%")
+    brent   = macro.get('brent_usd', 0)
+    brent_c = macro.get('brent_cambio_pct')
+    wti     = macro.get('wti_usd', 0)
+    wti_c   = macro.get('wti_cambio_pct')
+    brent_str = f"${brent:.2f}  ({s(brent_c)}{brent_c}%)" if brent_c is not None else f"${brent:.2f}"
+    wti_str   = f"${wti:.2f}   ({s(wti_c)}{wti_c}%)"     if wti_c   is not None else f"${wti:.2f}" if wti else "N/D"
+    print(f"  Brent    : {brent_str}")
+    print(f"  WTI      : {wti_str}")
+    print(f"  Conflicto Iran: dia {macro.get('conflicto_iran_dia', '?')}")
+    rec = macro.get('probabilidad_recesion_2026_polymarket_pct')
+    if rec is not None:
+        print(f"  Recesion 2026 (Polymarket): {rec}%")
     print()
     print("  Eventos criticos proximos:")
     for ev in macro["eventos_criticos"][:4]:
